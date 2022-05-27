@@ -1,0 +1,12 @@
+environment: localhost:8080 
+external-API: https://pokeapi.co/api/v2/pokemon/
+csv-dirFile: data\\pokemon.csv
+csv-ext: csv
+csv-comma: 59 # equals to ;
+ep-copyPkmn: /copyPokemonByRegion/:region
+ep-newPkmn: /newPokemon
+ep-allPkmn: /allPokemon
+ep-byRegion: /pokemonByRegion/:region
+ep-byId: /pokemonById/:id
+ep-byName: /pokemonByName/:name
+server-error: There is an error on the server, contact the admin

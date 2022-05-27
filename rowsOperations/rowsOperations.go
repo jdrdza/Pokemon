@@ -5,7 +5,7 @@ package rowsOperations
 
 // import packages
 import (
-	"Pokemon/structs"
+	s "Pokemon/structs"
 	"sort"
 	"strconv"
 )
@@ -35,8 +35,8 @@ func ExistsRow(rows [][]string, value string, columnName string) (bool, int) {
 }
 
 // Function that adds the new row in the Pokemon structure
-func AddRowToSlice(row []string) structs.Pokemon {
-	var pokemon structs.Pokemon
+func AddRowToSlice(row []string) s.Pokemon {
+	var pokemon s.Pokemon
 
 	pokemon.ID, _ = strconv.Atoi(row[0])
 	pokemon.Name = row[1]
@@ -57,7 +57,7 @@ func AddRowToFile(row []string) [][]string {
 }
 
 // Function that sorts the slice by ID in ascending order
-func SortSlice(pokemonSlice []structs.Pokemon) []structs.Pokemon {
+func SortSlice(pokemonSlice []s.Pokemon) []s.Pokemon {
 
 	sort.Slice(pokemonSlice, func(i, j int) bool {
 		return pokemonSlice[i].ID < pokemonSlice[j].ID
