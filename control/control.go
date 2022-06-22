@@ -49,6 +49,9 @@ type Controller interface {
 	PokemonById(c *gin.Context)
 	PokemonByName(c *gin.Context)
 	Items(c *gin.Context)
+	DeleteRegion(c *gin.Context)
+	DeleteId(c *gin.Context)
+	DeleteName(c *gin.Context)
 }
 
 func NewController(M method.Method) *controller {
@@ -233,6 +236,71 @@ func (con controller) Items(c *gin.Context) {
 
 	if len(pokemonSlice) == 0 {
 		response := error{Message: "There are no " + types + " items"}
+		c.IndentedJSON(http.StatusNotFound, response)
+		return
+	}
+
+	response := success{Count: len(pokemonSlice), Pokemon: pokemonSlice}
+	c.IndentedJSON(http.StatusOK, response)
+}
+
+func (con controller) DeleteRegion(c *gin.Context) {
+	region := c.Param("region")
+	pokemonSlice, err := con.M.DeletePokemonByRegion(region)
+	if err != nil {
+		response := error{Message: "There is an internal error, Contact the admin"}
+		c.IndentedJSON(http.StatusInternalServerError, response)
+		return
+	}
+
+	if len(pokemonSlice) == 0 {
+		response := error{Message: "There are no rows in the " + region + " region"}
+		c.IndentedJSON(http.StatusNotFound, response)
+		return
+	}
+
+	response := success{Count: len(pokemonSlice), Pokemon: pokemonSlice}
+	c.IndentedJSON(http.StatusOK, response)
+}
+
+func (con controller) DeleteId(c *gin.Context) {
+	strId := c.Param("id")
+	id, err := strconv.Atoi(strId)
+	if err != nil {
+		response := error{Message: "The value " + strId + " is not a number"}
+		c.IndentedJSON(http.StatusBadRequest, response)
+		return
+	}
+	pokemonSlice, err := con.M.DeletePokemonById(id)
+
+	if err != nil {
+		response := error{Message: "There is an internal error, Contact the admin"}
+		c.IndentedJSON(http.StatusInternalServerError, response)
+		return
+	}
+
+	if len(pokemonSlice) == 0 {
+		response := error{Message: "The id " + strId + " does not exist"}
+		c.IndentedJSON(http.StatusNotFound, response)
+		return
+	}
+
+	response := success{Count: len(pokemonSlice), Pokemon: pokemonSlice}
+	c.IndentedJSON(http.StatusOK, response)
+}
+
+func (con controller) DeleteName(c *gin.Context) {
+	name := c.Param("name")
+	pokemonSlice, err := con.M.DeletePokemonByName(name)
+
+	if err != nil {
+		response := error{Message: "There is an internal error, Contact the admin"}
+		c.IndentedJSON(http.StatusInternalServerError, response)
+		return
+	}
+
+	if len(pokemonSlice) == 0 {
+		response := error{Message: "The name " + name + " does not exist"}
 		c.IndentedJSON(http.StatusNotFound, response)
 		return
 	}

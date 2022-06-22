@@ -23,6 +23,9 @@ type Method interface {
 	GetPokemonById(id int) (pokemonSlice []pokemon)
 	GetPokemonByName(name string) (pokemonSlice []pokemon)
 	GetTypes(types string, items int, items_per_worker int) (pokemonSlice []pokemon, err error)
+	DeletePokemonByRegion(region string) (pokemonSlice []pokemon, err error)
+	DeletePokemonById(id int) (pokemonSlice []pokemon, err error)
+	DeletePokemonByName(name string) (pokemonSlice []pokemon, err error)
 }
 
 type pokemon struct {
@@ -239,6 +242,89 @@ func (m method) GetTypes(types string, items int, items_per_worker int) (pokemon
 	return sortSlice(pokemonSlice), nil
 }
 
+func (m method) DeletePokemonByRegion(region string) (pokemonSlice []pokemon, err error) {
+	pokemonSlice = []pokemon{}
+	rows := [][]string{}
+
+	for _, row := range m.CSV.GetRows() {
+		if row[2] == region {
+			pokemonSlice = appendSlice(row, pokemonSlice)
+		} else {
+			rows = append(rows, row)
+		}
+	}
+
+	err = m.CSV.WriteCSV(rows)
+	if err != nil {
+		err = errors.New("The file could not be saved")
+		return nil, err
+	}
+	pokemonSlice = sortSlice(pokemonSlice)
+	return pokemonSlice, nil
+}
+
+func (m method) DeletePokemonById(id int) (pokemonSlice []pokemon, err error) {
+	pokemonSlice = []pokemon{}
+	strId := strconv.Itoa(id)
+	rows := [][]string{}
+
+	for _, row := range m.CSV.GetRows() {
+
+		if row[0] == strId {
+			pokemonSlice = appendSlice(row, pokemonSlice)
+		} else {
+			rows = append(rows, row)
+		}
+	}
+
+	err = m.CSV.WriteCSV(rows)
+	if err != nil {
+		err = errors.New("The file could not be saved")
+		return nil, err
+	}
+
+	return pokemonSlice, nil
+}
+
+func (m method) DeletePokemonByName(name string) (pokemonSlice []pokemon, err error) {
+	pokemonSlice = []pokemon{}
+	rows := [][]string{}
+
+	for _, row := range m.CSV.GetRows() {
+		if row[1] == name {
+			pokemonSlice = appendSlice(row, pokemonSlice)
+		} else {
+			rows = append(rows, row)
+		}
+	}
+
+	err = m.CSV.WriteCSV(rows)
+	if err != nil {
+		err = errors.New("The file could not be saved")
+		return nil, err
+	}
+
+	return pokemonSlice, nil
+}
+
+/*
+func (m method)write(newRows [][]string) (pokemonSlice []pokemon, err error){
+	rows := m.CSV.GetRows()
+	rows = append(rows, newRows...)
+
+	err = m.CSV.WriteCSV(rows)
+	if err != nil {
+		err = errors.New("The file could not be saved")
+		return nil, err
+	}
+
+	for _, newRow := range newRows {
+		pokemonSlice = appendSlice(newRow, pokemonSlice)
+	}
+
+	return pokemonSlice, nil
+}
+*/
 func appendSlice(row []string, pokemonSlice []pokemon) []pokemon {
 	var pokemon pokemon
 

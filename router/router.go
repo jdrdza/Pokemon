@@ -131,4 +131,38 @@ func (route *router) Routers() {
 		})
 	}
 
+	delete := router.Group(config.EpBase)
+	{
+		delete.DELETE(config.Gregion, func(ctx *gin.Context) {
+			route.control.DeleteRegion(ctx)
+
+			route, err = Initialise()
+			if err != nil {
+				log.Println("There was an error: " + err.Error())
+				return
+			}
+		})
+
+		delete.DELETE(config.Gid, func(ctx *gin.Context) {
+			route.control.DeleteId(ctx)
+
+			route, err = Initialise()
+			if err != nil {
+				log.Println("There was an error: " + err.Error())
+				return
+			}
+		})
+
+		delete.DELETE(config.Gname, func(ctx *gin.Context) {
+			route.control.DeleteName(ctx)
+
+			route, err = Initialise()
+			if err != nil {
+				log.Println("There was an error: " + err.Error())
+				return
+			}
+		})
+
+	}
+
 }
