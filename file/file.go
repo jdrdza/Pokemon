@@ -43,7 +43,7 @@ func (c *csvFile) GetRows() (rows [][]string) {
 }
 
 func NewFile() (c *csvFile, err error) {
-	File, err := os.Open("data\\pokemon.csv")
+	File, err := os.Open("data/pokemon.csv")
 	if err != nil {
 		log.Println(err.Error())
 		err = errors.New("The File does not exist")
