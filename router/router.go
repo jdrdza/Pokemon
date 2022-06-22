@@ -49,7 +49,7 @@ func Initialise() (route *router, err error) {
 }
 
 func config() (*conf, error) {
-	data, err := ioutil.ReadFile("data\\config.yaml")
+	data, err := ioutil.ReadFile("data/config.yaml")
 	if err != nil {
 		return nil, err
 	}
