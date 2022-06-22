@@ -18,7 +18,7 @@ type CSV interface {
 }
 
 func (c *csvFile) WriteCSV(rows [][]string) (err error) {
-	file, err := os.Create("data/pokemon.csv")
+	file, err := os.Create("data\\pokemon.csv")
 
 	if err != nil {
 		log.Println(err.Error())
