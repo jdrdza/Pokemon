@@ -1,0 +1,9 @@
+server: localhost:8080
+ep-base: /pokemon
+g-region: /region/:region
+g-id: /id/:id
+g-name: /name/:name
+g-type: /types
+p-new: /new
+p-region: /region/:region
+p-restart: /restart
